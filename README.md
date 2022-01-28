@@ -20,7 +20,16 @@
 `kindle-send` is a command line utility to send files, webpages after converting them to mobi format to your kindle via e-mail. 
 Webpages are optimized for viewing on kindle, thanks to [percollate](https://github.com/danburzo/percollate).
 
-#### How to use it?
+
+
+<p align="center">
+  <img width="100%" src="assets/kindle-send-window.svg">
+</p>
+
+
+
+
+### How to use it?
 
 1. Clone this repo
 ```sh
@@ -86,6 +95,9 @@ When sending a collection of pages if no title is provided, volume takes the tit
 
 
 
+
+
+
 ---
 
 ## Contribute
@@ -99,6 +111,9 @@ Feel free to create an issue and then working on some feature, so that we don't 
 
 ## Todo
 
+
+- [ ] Weekly RSS feed dump, when combined with `cron`
 - [ ] Capability to create mobi without using `ebook-convert`
 - [ ] `--convert` option to specify subject of email as `convert` so that documents are converted by amazon to supported formats before sending to kindle.
+
 
