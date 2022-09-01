@@ -52,10 +52,10 @@ sudo pacman -S calibre
 
 4. Install other dependencies
 
-There are only two extra dependencies `selectolax` for crawling and `argparser` for parsing arguments.
+There are only three extra dependencies `selectolax` for crawling and `argparse` for parsing arguments and `ebooklib`.
 
 ```sh
-pip install argparser selectolax
+pip install argparse selectolax ebooklib
 ```
 
 5. Configure the Email
