@@ -6,6 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/bmaupin/go-epub v1.0.1
 	github.com/go-shiori/go-readability v0.0.0-20220215145315-dd6828d2f09b
+	github.com/thanhpk/randstr v1.0.4
 	gopkg.in/mail.v2 v2.3.1
 )
 

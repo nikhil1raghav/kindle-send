@@ -94,7 +94,7 @@ Create a text file with new line separated links of webpages and then pass it as
 
 
 ```sh
-kindle-send --link-file <path-to-url-file>
+kindle-send --linkfile <path-to-url-file>
 ```
 
 

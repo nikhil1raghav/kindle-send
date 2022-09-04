@@ -66,9 +66,24 @@ func CreateConfig() *config{
 
 	fmt.Printf("Enter password for Sender %s (password remains encrypted in your machine) : ",configuration.Receiver)
 	fmt.Scan(&configuration.Password)
+
+
 	fmt.Printf("File path to store all the documents on your computer (empty is ok) :")
 	configuration.StorePath, _ =reader.ReadString('\n')
+
 	configuration.StorePath=strings.Trim(configuration.StorePath, "\n")
+
+	encryptedPass, err := Encrypt(configuration.Sender, configuration.Password)
+	if err!=nil{
+		log.Println("Error encrypting password: ", err)
+		os.Exit(1)
+	}
+	configuration.Password=encryptedPass
+
+	if err!=nil{
+		log.Println(err)
+		os.Exit(1)
+	}
 	return configuration
 }
 func handleCreation(filename string) error {
@@ -100,6 +115,12 @@ func Load(filename string) (config, error) {
 		log.Println("Error converting config to json ", err)
 		return config{}, err
 	}
+	decryptedPass, err:=Decrypt(c.Sender, c.Password)
+	if err!=nil{
+		log.Println("Error decrypting password : ", err)
+		os.Exit(1)
+	}
+	c.Password=decryptedPass
 	log.Println("loaded configuration")
 	InitializeConfig(&c)
 	return c, nil
