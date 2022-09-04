@@ -2,15 +2,16 @@ package epubgen
 
 import (
 	"errors"
+	"os"
+	"path"
+	"sync"
+	"time"
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/bmaupin/go-epub"
 	"github.com/go-shiori/go-readability"
 	"github.com/nikhil1raghav/kindle-send/config"
 	"github.com/nikhil1raghav/kindle-send/util"
-	"os"
-	"path"
-	"sync"
-	"time"
 )
 
 type epubmaker struct {
@@ -89,7 +90,7 @@ func (e *epubmaker) embedImages(wg *sync.WaitGroup, article *readability.Article
 
 //TODO: Look for better formatting, this is bare bones
 func prepare(article *readability.Article) string {
-	return "<h1>" + article.Title + "</h1>" + article.Title
+	return "<h1>" + article.Title + "</h1>" + article.Content
 }
 
 //Add articles to epub
@@ -123,7 +124,7 @@ func Make(pageUrls []string, title string) (string, error) {
 			util.Magenta.Println("SKIPPING ", pageUrl)
 			continue
 		}
-		util.Green.Printf("Fetched %s --> %s ", pageUrl, article.Title)
+		util.Green.Printf("Fetched %s --> %s\n", pageUrl, article.Title)
 		readableArticles = append(readableArticles, article)
 	}
 
@@ -162,6 +163,7 @@ func Make(pageUrls []string, title string) (string, error) {
 	} else {
 		storeDir = config.GetInstance().StorePath
 	}
+
 
 	filename := path.Join(storeDir, title+".epub")
 	err = book.Epub.Write(filename)

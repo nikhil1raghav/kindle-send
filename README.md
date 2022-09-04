@@ -21,24 +21,25 @@
 
 ## Documentation
 
-`kindle-send` is a command line utility to send files, webpages after converting them to mobi format to your kindle via e-mail. 
+`kindle-send` is a command line utility to send files and webpages to your kindle via e-mail. 
+
+Webpages are optimized for viewing on kindle
 
 
+<p align = "center">
+<figure>
+<img width="90%" src="assets/toepub.png">
+<figcaption>Credits - Netflix tech blog<a href="https://netflixtechblog.com/fixing-performance-regressions-before-they-happen-eab2602b86fe">Fixing Performance Regressions Before they Happen</a></figcaption>
+</figure>
+</p>
 
-Webpages are optimized for viewing on kindle, thanks to [go-readability](https://github.com/go-shiori/go-readability)
+
+---
 
 
 An epub is created from a url, then mailed to the kindle. Amazon converts that epub into azw3 for viewing on kindle.
 
-
 So you can use kindle-send, even if you're using a different ereader like Kobo and Remarkable if it supports pushing ebooks via email.
-
-
-
-<p align="center">
-  <img width="100%" src="assets/kindle-send-window.svg">
-</p>
-
 
 
 
@@ -52,7 +53,10 @@ As this was not the case with the older [python version](https://github.com/nikh
 
 
 
-Download the binary for your operating system and architecture from release page and add it to your [PATH](https://en.wikipedia.org/wiki/PATH_(variable)).
+
+
+
+Download the binary for your operating system and architecture from [release page](https://github.com/nikhil1raghav/kindle-send/releases) and add it to your [PATH](https://en.wikipedia.org/wiki/PATH_(variable)).
 If there is no binary compatible for your system. Please create an issue.
 
 
@@ -63,6 +67,7 @@ If you're using gmail to send mails to kindle, please consider creating an [app 
 
 
 ---
+
 
 
 ### Following modes of operation are supported
@@ -76,6 +81,11 @@ kindle-send --file <path-to-file>
 ```
 
 
+<p align="center">
+  <img width="100%" src="assets/file-send.svg">
+</p>
+
+
 __2. Send a webpage__
 
 Quickly send a webpage to kindle
@@ -85,6 +95,9 @@ Quickly send a webpage to kindle
 kindle-send  --url <link-to-a-webpage>
 ```
 
+<p align="center">
+  <img width="100%" src="assets/kindle-send-window.svg">
+</p>
 
 
 __3. Multiple webpages combined in a single volume__
@@ -96,6 +109,13 @@ Create a text file with new line separated links of webpages and then pass it as
 ```sh
 kindle-send --linkfile <path-to-url-file>
 ```
+
+<p align="center">
+  <img width="100%" src="assets/linkfile.svg">
+</p>
+
+
+
 
 
 
@@ -118,6 +138,8 @@ Feel free to create an issue and then working on some feature, so that we don't 
 ## Todo
 
 - [ ] Weekly RSS feed dump, when combined with `cron`
+- [ ] Better CSS & formatting for epub
+- [ ] Compressing images before embedding to reduce final file size
 - [x] Remove dependency on percollate and calibre
 - [x] Make installation easier
 

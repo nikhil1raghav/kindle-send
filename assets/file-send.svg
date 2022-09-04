@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="terminal" baseProfile="full" viewBox="0 0 1016 563" width="1016" version="1.1">
+    <defs>
+        <termtosvg:template_settings xmlns:termtosvg="https://github.com/nbedos/termtosvg">
+            <termtosvg:screen_geometry columns="127" rows="33"/>
+            <termtosvg:animation type="css"/>
+        </termtosvg:template_settings>
+        <style type="text/css" id="generated-style"><![CDATA[#screen {
+                font-family: 'DejaVu Sans Mono', monospace;
+                font-style: normal;
+                font-size: 14px;
+            }
+
+        text {
+            dominant-baseline: text-before-edge;
+            white-space: pre;
+        }
+    
+            :root {
+                --animation-duration: 14689ms;
+            }
+
+            @keyframes roll {
+                0.000%{transform:translateY(0px)}
+1.906%{transform:translateY(-578px)}
+4.772%{transform:translateY(-1156px)}
+6.168%{transform:translateY(-1734px)}
+6.713%{transform:translateY(-2312px)}
+7.734%{transform:translateY(-2890px)}
+15.815%{transform:translateY(-3468px)}
+23.405%{transform:translateY(-4046px)}
+23.419%{transform:translateY(-4624px)}
+23.678%{transform:translateY(-5202px)}
+82.763%{transform:translateY(-5780px)}
+82.776%{transform:translateY(-6358px)}
+82.783%{transform:translateY(-6936px)}
+82.797%{transform:translateY(-7514px)}
+93.192%{transform:translateY(-8092px)}
+100.000%{transform:translateY(-8092px)}
+            }
+
+            #screen_view {
+                animation-duration: 14689ms;
+                animation-iteration-count:infinite;
+                animation-name:roll;
+                animation-timing-function: steps(1,end);
+                animation-fill-mode: forwards;
+            }
+        ]]></style>
+        <style type="text/css" id="user-style">
+            /* The colors defined below are the default 16 colors used for rendering text of the terminal. Adjust
+               them as needed.
+               PowerShell colors based on https://en.wikipedia.org/wiki/ANSI_escape_code#Colors */
+            .foreground {fill: #cccccc;}
+            .background {fill: #0c0c0c;}
+            .color0 {fill: #0c0c0c;}
+            .color1 {fill: #c50f1f;}
+            .color2 {fill: #13a10e;}
+            .color3 {fill: #c19c00;}
+            .color4 {fill: #0037da;}
+            .color5 {fill: #881798;}
+            .color6 {fill: #3a96dd;}
+            .color7 {fill: #cccccc;}
+            .color8 {fill: #767676;}
+            .color9 {fill: #e74856;}
+            .color10 {fill: #16c60c;}
+            .color11 {fill: #f9f1a5;}
+            .color12 {fill: #3b78ff;}
+            .color13 {fill: #b4009e;}
+            .color14 {fill: #61d6d6;}
+            .color15 {fill: #f2f2f2;}
+        </style>
+    </defs>
+    <svg id="screen" width="1016" height="561" viewBox="0 0 1016 561" preserveAspectRatio="xMidYMin slice">
+    <rect class="background" height="100%" width="100%" x="0" y="0"/><defs><g id="g1"><text x="0" textLength="8" class="background"> </text></g><g id="g2"><text x="0" textLength="144" class="foreground">nikhil@purpleterm </text><text x="144" textLength="8" font-weight="bold" class="color14">~</text><text x="152" textLength="24" font-weight="bold" class="color15"> % </text><text x="176" textLength="8" class="background"> </text><text x="184" textLength="832" class="foreground">                                                                                                        </text></g><g id="g3"><text x="0" textLength="144" class="foreground">nikhil@purpleterm </text><text x="144" textLength="8" font-weight="bold" class="color14">~</text><text x="152" textLength="24" font-weight="bold" class="color15"> % </text><text x="176" textLength="8" class="foreground">k</text><text x="184" textLength="8" class="background"> </text><text x="192" textLength="824" class="foreground">                                                                                                       </text></g><g id="g4"><text x="0" textLength="144" class="foreground">nikhil@purpleterm </text><text x="144" textLength="8" font-weight="bold" class="color14">~</text><text x="152" textLength="24" font-weight="bold" class="color15"> % </text><text x="176" textLength="16" class="foreground">ki</text><text x="192" textLength="8" class="background"> </text><text x="200" textLength="816" class="foreground">                                                                                                      </text></g><g id="g5"><text x="0" textLength="144" class="foreground">nikhil@purpleterm </text><text x="144" textLength="8" font-weight="bold" class="color14">~</text><text x="152" textLength="24" font-weight="bold" class="color15"> % </text><text x="176" textLength="24" class="foreground">kin</text><text x="200" textLength="8" class="background"> </text><text x="208" textLength="808" class="foreground">                                                                                                     </text></g><g id="g6"><text x="0" textLength="144" class="foreground">nikhil@purpleterm </text><text x="144" textLength="8" font-weight="bold" class="color14">~</text><text x="152" textLength="24" font-weight="bold" class="color15"> % </text><text x="176" textLength="32" class="foreground">kind</text><text x="208" textLength="8" class="background"> </text><text x="216" textLength="800" class="foreground">                                                                                                    </text></g><g id="g7"><text x="0" textLength="144" class="foreground">nikhil@purpleterm </text><text x="144" textLength="8" font-weight="bold" class="color14">~</text><text x="152" textLength="24" font-weight="bold" class="color15"> % </text><text x="176" textLength="496" class="foreground">kindle-send --file The-Big-Censored-Theory-or-Hacker-News.epub</text><text x="672" textLength="8" class="background"> </text><text x="680" textLength="336" class="foreground">                                          </text></g><g id="g8"><text x="0" textLength="144" class="foreground">nikhil@purpleterm </text><text x="144" textLength="8" font-weight="bold" class="color14">~</text><text x="152" textLength="24" font-weight="bold" class="color15"> % </text><text x="176" textLength="840" class="foreground">kindle-send --file The-Big-Censored-Theory-or-Hacker-News.epub                                           </text></g><g id="g9"><text x="0" textLength="160" class="color2">Loaded configuration</text></g><g id="g10"><text x="0" textLength="96" font-weight="bold" class="color14">Sending mail</text></g><g id="g11"><text x="0" textLength="352" font-weight="bold" class="color10">Mailed 1 files to purple_terminal@kindle.com</text><text x="352" textLength="8" class="background"> </text></g><g id="g12"><text x="0" textLength="352" font-weight="bold" class="color10">Mailed 1 files to purple_terminal@kindle.com</text><text x="352" textLength="8" font-weight="bold" class="background">%</text><text x="360" textLength="656" class="foreground">                                                                                  </text></g><g id="g13"><text x="0" textLength="8" class="background"> </text><text x="8" textLength="344" class="foreground">                                           </text></g><g id="g14"><text x="0" textLength="144" class="foreground">nikhil@purpleterm </text><text x="144" textLength="8" font-weight="bold" class="color14">~</text><text x="152" textLength="24" font-weight="bold" class="color15"> % </text><text x="176" textLength="840" class="foreground">                                                                                                         </text></g></defs><g id="screen_view"><g><rect x="0" y="0" width="8" height="17" class="foreground"/><use xlink:href="#g1" y="0"/></g><g><rect x="0" y="578" width="136" height="17" class="color4"/><rect x="176" y="578" width="8" height="17" class="foreground"/><use xlink:href="#g2" y="578"/></g><g><rect x="0" y="1156" width="136" height="17" class="color4"/><rect x="184" y="1156" width="8" height="17" class="foreground"/><use xlink:href="#g3" y="1156"/></g><g><rect x="0" y="1734" width="136" height="17" class="color4"/><rect x="192" y="1734" width="8" height="17" class="foreground"/><use xlink:href="#g4" y="1734"/></g><g><rect x="0" y="2312" width="136" height="17" class="color4"/><rect x="200" y="2312" width="8" height="17" class="foreground"/><use xlink:href="#g5" y="2312"/></g><g><rect x="0" y="2890" width="136" height="17" class="color4"/><rect x="208" y="2890" width="8" height="17" class="foreground"/><use xlink:href="#g6" y="2890"/></g><g><rect x="0" y="3468" width="136" height="17" class="color4"/><rect x="672" y="3468" width="8" height="17" class="foreground"/><use xlink:href="#g7" y="3468"/></g><g><rect x="0" y="4046" width="136" height="17" class="color4"/><rect x="672" y="4046" width="8" height="17" class="foreground"/><use xlink:href="#g7" y="4046"/></g><g><rect x="0" y="4624" width="136" height="17" class="color4"/><use xlink:href="#g8" y="4624"/><rect x="0" y="4641" width="8" height="17" class="foreground"/><use xlink:href="#g1" y="4641"/></g><g><rect x="0" y="5202" width="136" height="17" class="color4"/><use xlink:href="#g8" y="5202"/><use xlink:href="#g9" y="5219"/><use xlink:href="#g10" y="5236"/><rect x="0" y="5253" width="8" height="17" class="foreground"/><use xlink:href="#g1" y="5253"/></g><g><rect x="0" y="5780" width="136" height="17" class="color4"/><use xlink:href="#g8" y="5780"/><use xlink:href="#g9" y="5797"/><use xlink:href="#g10" y="5814"/><rect x="352" y="5831" width="8" height="17" class="foreground"/><use xlink:href="#g11" y="5831"/></g><g><rect x="0" y="6358" width="136" height="17" class="color4"/><use xlink:href="#g8" y="6358"/><use xlink:href="#g9" y="6375"/><use xlink:href="#g10" y="6392"/><rect x="352" y="6409" width="8" height="17" class="foreground"/><use xlink:href="#g12" y="6409"/><rect x="0" y="6426" width="8" height="17" class="foreground"/><use xlink:href="#g13" y="6426"/></g><g><rect x="0" y="6936" width="136" height="17" class="color4"/><use xlink:href="#g8" y="6936"/><use xlink:href="#g9" y="6953"/><use xlink:href="#g10" y="6970"/><rect x="352" y="6987" width="8" height="17" class="foreground"/><use xlink:href="#g12" y="6987"/><rect x="0" y="7004" width="136" height="17" class="color4"/><rect x="176" y="7004" width="8" height="17" class="foreground"/><use xlink:href="#g2" y="7004"/></g><g><rect x="0" y="7514" width="136" height="17" class="color4"/><use xlink:href="#g8" y="7514"/><use xlink:href="#g9" y="7531"/><use xlink:href="#g10" y="7548"/><rect x="352" y="7565" width="8" height="17" class="foreground"/><use xlink:href="#g12" y="7565"/><rect x="0" y="7582" width="136" height="17" class="color4"/><rect x="176" y="7582" width="8" height="17" class="foreground"/><use xlink:href="#g2" y="7582"/></g><g><rect x="0" y="8092" width="136" height="17" class="color4"/><use xlink:href="#g8" y="8092"/><use xlink:href="#g9" y="8109"/><use xlink:href="#g10" y="8126"/><rect x="352" y="8143" width="8" height="17" class="foreground"/><use xlink:href="#g12" y="8143"/><rect x="0" y="8160" width="136" height="17" class="color4"/><use xlink:href="#g14" y="8160"/><rect x="0" y="8177" width="8" height="17" class="foreground"/><use xlink:href="#g1" y="8177"/></g></g></svg>
+</svg>
