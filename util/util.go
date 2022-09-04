@@ -1,11 +1,10 @@
 package util
 
-import "C"
 import (
 	"bufio"
+	"github.com/fatih/color"
 	"os"
 	"strings"
-	"github.com/fatih/color"
 )
 
 var Red = color.New(color.FgRed)
@@ -16,11 +15,9 @@ var Green = color.New(color.FgGreen)
 var GreenBold = color.New(color.FgGreen).Add(color.Bold)
 var Magenta = color.New(color.FgMagenta)
 
-
-
-func Scanline()string{
-	scanner:=bufio.NewScanner(os.Stdin)
-	if scanner.Scan(){
+func Scanline() string {
+	scanner := bufio.NewScanner(os.Stdin)
+	if scanner.Scan() {
 		return scanner.Text()
 	}
 	color.Red("\nInterrupted")
@@ -29,6 +26,6 @@ func Scanline()string{
 }
 
 //Scan input and trim
-func ScanlineTrim() string{
+func ScanlineTrim() string {
 	return strings.TrimSpace(Scanline())
 }

@@ -10,75 +10,72 @@ import (
 	"os"
 )
 
-
-func extractLinks(filename string) (links []string){
-	links =make([]string,0)
-	file, err:=os.Open(filename)
-	if err!=nil{
+func extractLinks(filename string) (links []string) {
+	links = make([]string, 0)
+	file, err := os.Open(filename)
+	if err != nil {
 		util.Red.Println("Error opening link file", err)
 		return
 	}
 	defer file.Close()
-	scanner:=bufio.NewScanner(file)
+	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
-	for scanner.Scan(){
-		links=append(links, scanner.Text())
+	for scanner.Scan() {
+		links = append(links, scanner.Text())
 	}
 	return
 }
-func main(){
-	DefaultConfig, err :=config.DefaultConfigPath()
-	if err!=nil{
+func main() {
+	DefaultConfig, err := config.DefaultConfigPath()
+	if err != nil {
 		util.Red.Println(err)
 		return
 	}
 
-	configPath:=flag.String("config", DefaultConfig, "Path to the configuration file (optional)")
+	configPath := flag.String("config", DefaultConfig, "Path to the configuration file (optional)")
 
-	pageUrl:=flag.String("url", "", "URL of webpage to send")
-	title:=flag.String("title", "", "Title of the epub (optional)")
-	linkfile:=flag.String("linkfile", "", "Path to a text file containing multiple links separated by newline")
-	filePath:=flag.String("file", "", "Mail a file to kindle, use kindle-send as a simple mailer")
-	
+	pageUrl := flag.String("url", "", "URL of webpage to send")
+	title := flag.String("title", "", "Title of the epub (optional)")
+	linkfile := flag.String("linkfile", "", "Path to a text file containing multiple links separated by newline")
+	filePath := flag.String("file", "", "Mail a file to kindle, use kindle-send as a simple mailer")
+
 	flag.Parse()
-	passed:=0
-	flag.Visit(func(f *flag.Flag){
+	passed := 0
+	flag.Visit(func(f *flag.Flag) {
 		passed++
 	})
-	if passed==0{
+	if passed == 0 {
 		flag.PrintDefaults()
 	}
 
-
-
-	urls:=make([]string,0)
-	if len(*pageUrl)!=0{
-		urls=append(urls,*pageUrl)
+	urls := make([]string, 0)
+	if len(*pageUrl) != 0 {
+		urls = append(urls, *pageUrl)
 	}
 
-	if len(*linkfile)!=0{
-		urls=append(urls, extractLinks(*linkfile)...)
+	if len(*linkfile) != 0 {
+		urls = append(urls, extractLinks(*linkfile)...)
 	}
 
-	_,err = config.Load(*configPath)
-	if err!=nil{
+	_, err = config.Load(*configPath)
+	if err != nil {
 		util.Red.Println(err)
 		return
 	}
-	filesToSend:=make([]string,0)
-	if len(*filePath)!=0{
-		filesToSend=append(filesToSend, *filePath)
+	filesToSend := make([]string, 0)
+	if len(*filePath) != 0 {
+		filesToSend = append(filesToSend, *filePath)
 	}
-	if len(urls)!=0{
-		book, err:=epubgen.Make(urls, *title)
-		if err!=nil{
+	if len(urls) != 0 {
+		book, err := epubgen.Make(urls, *title)
+		if err != nil {
 			util.Red.Println(err)
-		}else{
-			filesToSend=append(filesToSend, book)
+		} else {
+			filesToSend = append(filesToSend, book)
 		}
 	}
 
-	if len(filesToSend)!=0{
+	if len(filesToSend) != 0 {
 		mail.Send(filesToSend)
 	}
 

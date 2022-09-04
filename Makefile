@@ -16,7 +16,6 @@ windows:
 	CGO=0 GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o kindle-send-windows-32bit-${VERSION}.exe ./main.go
 	CGO=0 GOOS=windows GOARCH=arm go build -ldflags "-s -w" -o kindle-send-windows-arm-${VERSION}.exe ./main.go
 
-darwin-amd64:
+darwin:
 	CGO=0 GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w" -o kindle-send-darwin-64bit-${VERSION} ./main.go
-	CGO=0 GOOS=darwin GOARCH=386 go build -ldflags "-s -w" -o kindle-send-darwin-32bit-${VERSION} ./main.go
 	CGO=0 GOOS=darwin GOARCH=arm64 go build -ldflags "-s -w" -o kindle-send-darwin-arm64-${VERSION} ./main.go

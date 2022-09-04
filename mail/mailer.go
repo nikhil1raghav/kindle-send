@@ -43,5 +43,4 @@ func Send(files []string) {
 		util.GreenBold.Printf("Mailed %d files to %s", tosend, cfg.Receiver)
 	}
 
-
 }
