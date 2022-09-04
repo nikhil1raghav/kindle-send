@@ -2,12 +2,11 @@ package epubgen
 
 import (
 	"errors"
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/bmaupin/go-epub"
 	"github.com/go-shiori/go-readability"
 	"github.com/nikhil1raghav/kindle-send/config"
-	"log"
+	"github.com/nikhil1raghav/kindle-send/util"
 	"os"
 	"path"
 	"sync"
@@ -36,7 +35,7 @@ func (e *epubmaker) changeRefs(i int, img *goquery.Selection){
 	imgSrc, exists:=img.Attr("src")
 	if exists{
 		if _, ok:=e.downloads[imgSrc];ok{
-			log.Printf("Setting img src from %s to %s ", imgSrc , e.downloads[imgSrc])
+			util.Green.Printf("Setting img src from %s to %s \n", imgSrc , e.downloads[imgSrc])
 			img.SetAttr("src", e.downloads[imgSrc])
 		}
 	}
@@ -44,7 +43,7 @@ func (e *epubmaker) changeRefs(i int, img *goquery.Selection){
 
 //Download images and add to epub zip
 func (e *epubmaker) downloadImages(i int, img *goquery.Selection){
-	fmt.Println("Downloading images")
+	util.CyanBold.Println("Downloading Images")
 	imgSrc, exists:=img.Attr("src")
 	if exists{
 
@@ -55,10 +54,10 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection){
 
 		imgRef, err:=e.Epub.AddImage(imgSrc,"")
 		if err!=nil{
-			log.Printf("Couldn't add image %s : %s\n",imgSrc, err)
+			util.Red.Printf("Couldn't add image %s : %s\n",imgSrc, err)
 			return
 		}else{
-			log.Printf("Downloaded image %s\n", imgSrc)
+			util.Green.Printf("Downloaded image %s\n", imgSrc)
 			e.downloads[imgSrc]=imgRef
 		}
 	}
@@ -66,7 +65,7 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection){
 
 //Fetches images in article and then embeds them into epub
 func (e *epubmaker) embedImages(wg *sync.WaitGroup, article *readability.Article) {
-	fmt.Println("Embedding images in ", article.Title)
+	util.Cyan.Println("Embedding images in ", article.Title)
 	defer wg.Done()
 	//TODO: Compress images before embedding to improve size
 	doc:=goquery.NewDocumentFromNode(article.Node)
@@ -80,7 +79,7 @@ func (e *epubmaker) embedImages(wg *sync.WaitGroup, article *readability.Article
 	content, err:=doc.Html()
 
 	if err!=nil{
-		log.Printf("Error converting modified %s to HTML, it will be transferred without images : %s \n", article.Title, err)
+		util.Red.Printf("Error converting modified %s to HTML, it will be transferred without images : %s \n", article.Title, err)
 	}else{
 		article.Content=content
 	}
@@ -88,8 +87,9 @@ func (e *epubmaker) embedImages(wg *sync.WaitGroup, article *readability.Article
 
 //TODO: Look for better formatting, this is bare bones
 func prepare(article *readability.Article) string{
-	return fmt.Sprintf("<h1>%s</h1>%s",article.Title,article.Content)
+	return "<h1>"+article.Title+"</h1>"+article.Title
 }
+
 
 
 //Add articles to epub
@@ -98,12 +98,12 @@ func (e *epubmaker) addContent(articles *[]readability.Article) error{
 	for _, article:=range *articles{
 		_, err:=e.Epub.AddSection(prepare(&article), article.Title, "","")
 		if err!=nil{
-			log.Printf("Couldn't add %s to epub : %s", article.Title, err)
+			util.Red.Printf("Couldn't add %s to epub : %s", article.Title, err)
 		}else{
 			added++
 		}
 	}
-	log.Printf("Added %d articles\n",added)
+	util.Green.Printf("Added %d articles\n",added)
 	if added==0{
 		return errors.New("No article was added, epub creation failed")
 	}
@@ -119,11 +119,11 @@ func Make(pageUrls []string, title string) (string, error){
 	for _,pageUrl:=range pageUrls{
 		article, err:=fetchReadable(pageUrl)
 		if err!=nil{
-			log.Printf("Couldn't convert %s because %s", pageUrl, err)
-			fmt.Println("SKIPPING ",pageUrl)
+			util.Red.Printf("Couldn't convert %s because %s", pageUrl, err)
+			util.Magenta.Println("SKIPPING ", pageUrl)
 			continue
 		}
-		log.Printf("Fetched %s --> %s ", pageUrl, article.Title)
+		util.Green.Printf("Fetched %s --> %s ", pageUrl, article.Title)
 		readableArticles=append(readableArticles, article)
 	}
 
@@ -133,7 +133,7 @@ func Make(pageUrls []string, title string) (string, error){
 
 	if len(title)==0{
 		title=readableArticles[0].Title
-		log.Printf("No title supplied, inheriting title of first readable article : %s \n", title)
+		util.Magenta.Printf("No title supplied, inheriting title of first readable article : %s \n", title)
 	}
 
 	book:=NewEpubmaker(title)
@@ -158,14 +158,14 @@ func Make(pageUrls []string, title string) (string, error){
 	if len(config.GetInstance().StorePath)==0{
 		storeDir, err =os.Getwd()
 		if err!=nil{
-			log.Println("Error getting current directory, trying fallback")
+			util.Red.Println("Error getting current directory, trying fallback")
 			storeDir="./"
 		}
 	}else{
 		storeDir=config.GetInstance().StorePath
 	}
 
-	filename:=path.Join(storeDir, fmt.Sprintf("%s.epub",title))
+	filename:=path.Join(storeDir, title+".epub")
 	err=book.Epub.Write(filename)
 	if err!=nil{
 		return "", err

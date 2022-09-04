@@ -6,7 +6,7 @@ import (
 	"github.com/nikhil1raghav/kindle-send/config"
 	"github.com/nikhil1raghav/kindle-send/epubgen"
 	"github.com/nikhil1raghav/kindle-send/mail"
-	"log"
+	"github.com/nikhil1raghav/kindle-send/util"
 	"os"
 )
 
@@ -15,7 +15,7 @@ func extractLinks(filename string) (links []string){
 	links =make([]string,0)
 	file, err:=os.Open(filename)
 	if err!=nil{
-		log.Println("Error opening link file", err)
+		util.Red.Println("Error opening link file", err)
 		return
 	}
 	defer file.Close()
@@ -29,7 +29,7 @@ func extractLinks(filename string) (links []string){
 func main(){
 	DefaultConfig, err :=config.DefaultConfigPath()
 	if err!=nil{
-		log.Println(err)
+		util.Red.Println(err)
 		return
 	}
 
@@ -62,7 +62,7 @@ func main(){
 
 	_,err = config.Load(*configPath)
 	if err!=nil{
-		log.Println(err)
+		util.Red.Println(err)
 		return
 	}
 	filesToSend:=make([]string,0)
@@ -72,7 +72,7 @@ func main(){
 	if len(urls)!=0{
 		book, err:=epubgen.Make(urls, *title)
 		if err!=nil{
-			log.Println(err)
+			util.Red.Println(err)
 		}else{
 			filesToSend=append(filesToSend, book)
 		}

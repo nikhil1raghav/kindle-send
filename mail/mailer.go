@@ -1,8 +1,7 @@
 package mail
 
 import (
-	"fmt"
-	"log"
+	"github.com/nikhil1raghav/kindle-send/util"
 	"os"
 
 	config "github.com/nikhil1raghav/kindle-send/config"
@@ -22,7 +21,7 @@ func Send(files []string) {
 	for _, file := range files {
 		_, err := os.Stat(file)
 		if err != nil {
-			log.Printf("Couldn't find the file %s : %s \n", file, err)
+			util.Red.Printf("Couldn't find the file %s : %s \n", file, err)
 			continue
 		} else {
 			tosend++
@@ -30,18 +29,19 @@ func Send(files []string) {
 		}
 	}
 	if tosend == 0 {
-		fmt.Println("No files to send")
+		util.Cyan.Println("No files to send")
 		return
 	}
 
 	dialer := gomail.NewDialer(cfg.Server, cfg.Port, cfg.Sender, cfg.Password)
 
-	fmt.Println("Sending mail")
+	util.CyanBold.Println("Sending mail")
 	if err := dialer.DialAndSend(msg); err != nil {
-		fmt.Println("Error sending mail ", err)
+		util.Red.Println("Error sending mail : ", err)
 		return
 	} else {
-		fmt.Printf("Mailed %d files to %s", tosend, cfg.Receiver)
+		util.GreenBold.Printf("Mailed %d files to %s", tosend, cfg.Receiver)
 	}
+
 
 }

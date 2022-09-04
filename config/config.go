@@ -1,11 +1,9 @@
 package config
 
 import (
-	"bufio"
 	"encoding/json"
-	"fmt"
+	"github.com/nikhil1raghav/kindle-send/util"
 	"io/ioutil"
-	"log"
 	"os"
 	user2 "os/user"
 	"path"
@@ -27,13 +25,14 @@ func isGmail(mail string) bool {
 func DefaultConfigPath() (string, error){
 	user, err:=user2.Current()
 	if err!=nil{
-		log.Fatal("Couldn't get current user ", err)
+		util.Red.Println("Couldn't get current user ", err)
+		os.Exit(1)
 	}
 	return path.Join(user.HomeDir, "KindleConfig.json"), nil
 }
 func exists(filename string) bool{
 	if _,err:=os.Stat(filename);err!=nil{
-		log.Println(err)
+		util.Red.Println(err)
 		return false
 	}
 	return true
@@ -45,56 +44,52 @@ func NewConfig()*config{
 	return &config
 }
 func CreateConfig() *config{
+
+	util.CyanBold.Println("CONFIGURE KINDLE-SEND")
+
+
 	configuration:=NewConfig()
-	reader:=bufio.NewReader(os.Stdin)
-	fmt.Printf("Email of your kindle and press enter (eg. purple_terminal@kindle.com) : ")
-	fmt.Scan(&configuration.Receiver)
-	fmt.Printf("Email that'll be used to send documents to kindle (eg. yourname@gmail.com) : ")
-	fmt.Scan(&configuration.Sender)
+	util.Cyan.Printf("Email of your kindle and press enter (eg. purple_terminal@kindle.com) : ")
+	configuration.Receiver=util.ScanlineTrim()
+	util.Cyan.Printf("Email that'll be used to send documents to kindle (eg. yourname@gmail.com) : ")
+	configuration.Sender=util.ScanlineTrim()
 
 	if isGmail(configuration.Sender)==false{
-		fmt.Println("Sender email is different then Gmail, " +
+		util.Cyan.Println("Sender email is different then Gmail, " +
 			"can you help with SMTP server address and SMTP port for your email provider\n" +
-			"Just search SMTP settings for <your email domain>.com on internet \n" +
-			"-----------------------------------------")
+			"Just search SMTP settings for <your email domain>.com on internet")
 
-		fmt.Printf("Enter SMTP Server Address (eg. smtp.gmail.com) : ")
-		fmt.Scan(&configuration.Server)
-		fmt.Printf("Enter SMTP port (usually 587 or 485) : ")
-		fmt.Scan(&configuration.Port)
+		util.Cyan.Printf("Enter SMTP Server Address (eg. smtp.gmail.com) : ")
+		configuration.Server=util.ScanlineTrim()
+		util.Cyan.Printf("Enter SMTP port (usually 587 or 485) : ")
+		configuration.Server=util.ScanlineTrim()
 	}
 
-	fmt.Printf("Enter password for Sender %s (password remains encrypted in your machine) : ",configuration.Receiver)
-	fmt.Scan(&configuration.Password)
+	util.Cyan.Printf("Enter password for Sender %s (password remains encrypted in your machine) : ",configuration.Sender)
+	configuration.Password=util.ScanlineTrim()
 
 
-	fmt.Printf("File path to store all the documents on your computer (empty is ok) :")
-	configuration.StorePath, _ =reader.ReadString('\n')
-
-	configuration.StorePath=strings.Trim(configuration.StorePath, "\n")
-
+	util.Cyan.Printf("File path to store all the documents on your computer (empty is ok) :")
+	configuration.StorePath=util.ScanlineTrim()
 	encryptedPass, err := Encrypt(configuration.Sender, configuration.Password)
 	if err!=nil{
-		log.Println("Error encrypting password: ", err)
+		util.Red.Println("Error encrypting password ", err)
 		os.Exit(1)
 	}
 	configuration.Password=encryptedPass
 
-	if err!=nil{
-		log.Println(err)
-		os.Exit(1)
-	}
 	return configuration
 }
+
 func handleCreation(filename string) error {
-	fmt.Println("Configuration file doesn't exist\n Answer next few questions to create config file\n")
+	util.Red.Println("Configuration file doesn't exist\n Answer next few questions to create config file\n")
 	configuration:=CreateConfig()
 	err := Save(*configuration, filename)
 	if err!=nil{
-		log.Println("Error while writing config to ",filename, err)
+		util.Red.Println("Error while writing config to ",filename, err)
 		return err
 	}
-	fmt.Printf("Config created successfully and stored at %s, you can directly edit it later on ", filename)
+	util.Red.Printf("Config created successfully and stored at %s, you can directly edit it later on ", filename)
 	return nil
 }
 func Load(filename string) (config, error) {
@@ -106,22 +101,21 @@ func Load(filename string) (config, error) {
 	}
 	data, err:=ioutil.ReadFile(filename)
 	if err!=nil{
-		log.Println("Error reading config ", err)
+		util.Red.Println("Error reading config ", err)
 		return config{}, err
 	}
 	var c config
 	err = json.Unmarshal(data, &c)
 	if err!=nil{
-		log.Println("Error converting config to json ", err)
+		util.Red.Println("Error converting config to json ", err)
 		return config{}, err
 	}
 	decryptedPass, err:=Decrypt(c.Sender, c.Password)
 	if err!=nil{
-		log.Println("Error decrypting password : ", err)
+		util.Red.Println("Error decrypting password : ", err)
 		os.Exit(1)
 	}
 	c.Password=decryptedPass
-	log.Println("loaded configuration")
 	InitializeConfig(&c)
 	return c, nil
 }
@@ -129,7 +123,7 @@ func Load(filename string) (config, error) {
 func Save(c config, filename string) error {
 	data, err:=json.MarshalIndent(c, "", "	")
 	if err!=nil{
-		log.Println("Error parsing configuration for writing")
+		util.Red.Println("Error parsing configuration for writing")
 		return err
 	}
 	return ioutil.WriteFile(filename, data, 0644)
@@ -138,7 +132,7 @@ func Save(c config, filename string) error {
 func InitializeConfig(c *config){
 	if instance==nil{
 		instance=c
-		log.Println("Initialized configuration instance")
+		util.Green.Println("Loaded configuration")
 	}
 }
 
