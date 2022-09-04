@@ -15,10 +15,23 @@
 
 ---
 
+
+
+
+
 ## Documentation
 
 `kindle-send` is a command line utility to send files, webpages after converting them to mobi format to your kindle via e-mail. 
-Webpages are optimized for viewing on kindle, thanks to [percollate](https://github.com/danburzo/percollate).
+
+
+
+Webpages are optimized for viewing on kindle, thanks to [go-readability](https://github.com/go-shiori/go-readability)
+
+
+An epub is created from a url, then mailed to the kindle. Amazon converts that epub into azw3 for viewing on kindle.
+
+
+So you can use kindle-send, even if you're using a different ereader like Kobo and Remarkable if it supports pushing ebooks via email.
 
 
 
@@ -29,91 +42,83 @@ Webpages are optimized for viewing on kindle, thanks to [percollate](https://git
 
 
 
-### How to use it?
+---
 
-1. Clone this repo
-```sh
-git clone "https://github.com/nikhil1raghav/kindle-send.git"
-```
+### Installation
 
-2. Install percollate
+To run kindle-send you just need the compiled binary, no other dependency is required.
 
-```sh
-npm install -g percollate
-```
+As this was not the case with the older [python version](https://github.com/nikhil1raghav/kindle-send/tree/python) which required percollate, calibre etc.
 
-3. Install Calibre
 
-I don't know if `ebook-convert` can be installed as a stand-alone  executable. If you have a kindle then there is a very high chance that you have calibre installed.
 
-```sh
-sudo pacman -S calibre
-```
+Download the binary for your operating system and architecture from release page and add it to your [PATH](https://en.wikipedia.org/wiki/PATH_(variable)).
+If there is no binary compatible for your system. Please create an issue.
 
-4. Install other dependencies
 
-There are only three extra dependencies `selectolax` for crawling and `argparse` for parsing arguments and `ebooklib`.
+For the first time when you run `kindle-send`, you need to answer some questions to create a configuration file, which has options like sender, receiver, password and path to store the generated files.
 
-```sh
-pip install argparse selectolax ebooklib
-```
 
-5. Configure the Email
+If you're using gmail to send mails to kindle, please consider creating an [app password](https://support.google.com/mail/answer/185833?hl=en-GB) and then using it.
 
-There is a configuration file `config.py` which stores your email credentials and other global options. Bare minimum you need to do is fill in the credentials of the mail that you're going to use for sending the documents.
 
+---
 
 
 ### Following modes of operation are supported
 
 __1. Send a file__
 
+Using `kindle-send` to mail an already existing file.
 
 ```sh
 kindle-send --file <path-to-file>
 ```
 
+
 __2. Send a webpage__
+
+Quickly send a webpage to kindle
+
+
 ```sh
-kindle-send  --link <link-to-a-webpage>
+kindle-send  --url <link-to-a-webpage>
 ```
+
+
 
 __3. Multiple webpages combined in a single volume__
 
-Create a text file with new line separated links of webpages and then pass it as url file to `--link-file` option
+
+Create a text file with new line separated links of webpages and then pass it as link file to `--linkfile` option
+
 
 ```sh
 kindle-send --link-file <path-to-url-file>
 ```
 
+
+
 ### Additional options
 
 Specify the title for the document using `--title` option.
-A different receiver using `--receiver` option
+
+Specify a different configuration file using `--config` option. Configuration is stored in home directory as `KindleConfig.json`. You can directly edit it if you want.
 
 When sending a collection of pages if no title is provided, volume takes the title of the first page.
-
-
-
-
 
 
 ---
 
 ## Contribute
 
-Currently it is a wrapper on [percollate](https://github.com/danburzo/percollate) and [Calibre's](https://github.com/danburzo/percollate) __ebook-convert__. 
 Feel free to create an issue and then working on some feature, so that we don't overwrite each other.
-
-
----
 
 
 ## Todo
 
-
 - [ ] Weekly RSS feed dump, when combined with `cron`
-- [ ] Capability to create mobi without using `ebook-convert`
-- [ ] `--convert` option to specify subject of email as `convert` so that documents are converted by amazon to supported formats before sending to kindle.
+- [x] Remove dependency on percollate and calibre
+- [x] Make installation easier
 
 
