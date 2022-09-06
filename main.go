@@ -42,12 +42,12 @@ func main() {
 	}
 
 	configPath := flag.String("config", DefaultConfig, "Path to the configuration file (optional)")
-
 	pageUrl := flag.String("url", "", "URL of webpage to send")
 	title := flag.String("title", "", "Title of the epub (optional)")
 	linkfile := flag.String("linkfile", "", "Path to a text file containing multiple links separated by newline")
 	filePath := flag.String("file", "", "Mail a file to kindle, use kindle-send as a simple mailer")
-	mailTimeout :=flag.Int("mail-timeout",30, "Timeout for sending mail int Seconds" )
+	mailTimeout :=flag.Int("mail-timeout",120, "Timeout for sending mail in Seconds" )
+	_ =flag.Bool("version", false, "Print version information")
 
 	flag.Parse()
 	passed := 0
@@ -56,6 +56,9 @@ func main() {
 	})
 	if passed == 0 {
 		flag.PrintDefaults()
+	}
+	if flagPassed("version"){
+		util.PrintVersion()
 	}
 
 
