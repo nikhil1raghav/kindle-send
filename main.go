@@ -25,6 +25,15 @@ func extractLinks(filename string) (links []string) {
 	}
 	return
 }
+func flagPassed(name string) bool{
+	visited:=false
+	flag.Visit(func(f *flag.Flag) {
+		if f.Name==name{
+			visited=true
+		}
+	})
+	return visited
+}
 func main() {
 	DefaultConfig, err := config.DefaultConfigPath()
 	if err != nil {
@@ -38,6 +47,7 @@ func main() {
 	title := flag.String("title", "", "Title of the epub (optional)")
 	linkfile := flag.String("linkfile", "", "Path to a text file containing multiple links separated by newline")
 	filePath := flag.String("file", "", "Mail a file to kindle, use kindle-send as a simple mailer")
+	mailTimeout :=flag.Int("mail-timeout",30, "Timeout for sending mail int Seconds" )
 
 	flag.Parse()
 	passed := 0
@@ -47,6 +57,7 @@ func main() {
 	if passed == 0 {
 		flag.PrintDefaults()
 	}
+
 
 	urls := make([]string, 0)
 	if len(*pageUrl) != 0 {
@@ -74,9 +85,12 @@ func main() {
 			filesToSend = append(filesToSend, book)
 		}
 	}
-
 	if len(filesToSend) != 0 {
-		mail.Send(filesToSend)
+		timeout:=config.DefaultTimeout
+		if flagPassed("mail-timeout"){
+			timeout=*mailTimeout
+		}
+		mail.Send(filesToSend, timeout)
 	}
 
 }

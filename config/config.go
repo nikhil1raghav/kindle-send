@@ -18,7 +18,7 @@ type config struct {
 	Server    string `json:"server"`
 	Port      int    `json:"port"`
 }
-
+const DefaultTimeout = 120
 var instance *config
 
 func isGmail(mail string) bool {

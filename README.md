@@ -121,6 +121,10 @@ kindle-send --linkfile <path-to-url-file>
 
 ### Additional options
 
+Default timeout for mail is 2 minutes, if you get timeout error while sending bigger files. Please increase the timeout using `--mail-timeout <number of seconds>` option
+
+
+
 Specify the title for the document using `--title` option.
 
 Specify a different configuration file using `--config` option. Configuration is stored in home directory as `KindleConfig.json`. You can directly edit it if you want.
