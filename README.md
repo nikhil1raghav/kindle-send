@@ -60,6 +60,13 @@ Download the binary for your operating system and architecture from [release pag
 If there is no binary compatible for your system. Please create an issue.
 
 
+If you have golang installed, you can also install kindle-send using
+
+```sh
+go install github.com/nikhil1raghav/kindle-send@latest
+```
+
+
 For the first time when you run `kindle-send`, you need to answer some questions to create a configuration file, which has options like sender, receiver, password and path to store the generated files.
 
 
