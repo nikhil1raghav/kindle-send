@@ -19,6 +19,7 @@ type config struct {
 	Port      int    `json:"port"`
 }
 const DefaultTimeout = 120
+const XdgConfigHome = "XDG_CONFIG_HOME"
 var instance *config
 
 func isGmail(mail string) bool {
@@ -31,7 +32,17 @@ func DefaultConfigPath() (string, error) {
 		util.Red.Println("Couldn't get current user ", err)
 		os.Exit(1)
 	}
-	return path.Join(user.HomeDir, "KindleConfig.json"), nil
+	xdgConfigHome:=os.Getenv(XdgConfigHome)
+	var configFolder string
+	if len(xdgConfigHome)==0{
+		configFolder =path.Join(user.HomeDir, ".config")
+		util.Red.Println("Couldn't find config home, will look for config at ", configFolder)
+	}else{
+		configFolder = xdgConfigHome
+	}
+	_=os.Mkdir(configFolder, os.ModePerm)
+
+	return path.Join(configFolder, "KindleConfig.json"), nil
 }
 func exists(filename string) bool {
 	if _, err := os.Stat(filename); err != nil {
@@ -83,7 +94,7 @@ func CreateConfig() *config {
 }
 
 func handleCreation(filename string) error {
-	util.Red.Println("Configuration file doesn't exist\n Answer next few questions to create config file\n")
+	util.Red.Println("Configuration file doesn't exist\n Answer next few questions to create config file")
 	configuration := CreateConfig()
 	err := Save(*configuration, filename)
 	if err != nil {
