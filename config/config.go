@@ -36,7 +36,7 @@ func DefaultConfigPath() (string, error) {
 	var configFolder string
 	if len(xdgConfigHome)==0{
 		configFolder =path.Join(user.HomeDir, ".config")
-		util.Red.Println("Couldn't find config home, will look for config at ", configFolder)
+		util.Cyan.Println("Config home not set, will look for config at ", configFolder)
 	}else{
 		configFolder = xdgConfigHome
 	}
