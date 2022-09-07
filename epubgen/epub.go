@@ -48,6 +48,7 @@ func (e *epubmaker) changeRefs(i int, img *goquery.Selection) {
 func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 	util.CyanBold.Println("Downloading Images")
 	imgSrc, exists := img.Attr("src")
+
 	if exists {
 
 		//don't download same thing twice
@@ -55,7 +56,11 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 			return
 		}
 
-		imgRef, err := e.Epub.AddImage(imgSrc, "")
+		//pass unique and safe image names here, then it will not crash on windows
+		//use murmur hash to generate file name
+		imageFileName:=util.GetHash(imgSrc)
+
+		imgRef, err := e.Epub.AddImage(imgSrc, imageFileName)
 		if err != nil {
 			util.Red.Printf("Couldn't add image %s : %s\n", imgSrc, err)
 			return
