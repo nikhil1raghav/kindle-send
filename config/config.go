@@ -63,9 +63,9 @@ func CreateConfig() *config {
 	util.CyanBold.Println("CONFIGURE KINDLE-SEND")
 
 	configuration := NewConfig()
-	util.Cyan.Printf("Email of your kindle and press enter (eg. purple_terminal@kindle.com) : ")
+	util.Cyan.Printf("Email of your device and press enter (eg. purple_terminal@kindle.com) : ")
 	configuration.Receiver = util.ScanlineTrim()
-	util.Cyan.Printf("Email that'll be used to send documents to kindle (eg. yourname@gmail.com) : ")
+	util.Cyan.Printf("Email that'll be used to send documents to device (eg. yourname@gmail.com) : ")
 	configuration.Sender = util.ScanlineTrim()
 
 	if isGmail(configuration.Sender) == false {
@@ -111,7 +111,7 @@ func handleCreation(filename string) error {
 		util.Red.Println("Error while writing config to ", filename, err)
 		return err
 	}
-	util.Red.Printf("Config created successfully and stored at %s, you can directly edit it later on ", filename)
+	util.Red.Printf("Config created successfully and stored at %s, you can directly edit it later on \n", filename)
 	return nil
 }
 func Load(filename string) (config, error) {
