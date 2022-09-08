@@ -7,6 +7,7 @@ import (
 	"os"
 	user2 "os/user"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -74,8 +75,17 @@ func CreateConfig() *config {
 
 		util.Cyan.Printf("Enter SMTP Server Address (eg. smtp.gmail.com) : ")
 		configuration.Server = util.ScanlineTrim()
-		util.Cyan.Printf("Enter SMTP port (usually 587 or 485) : ")
-		configuration.Server = util.ScanlineTrim()
+		for {
+			util.Cyan.Printf("Enter SMTP port (usually 587 or 465) : ")
+			portStr:=util.ScanlineTrim()
+			portInt, err:=strconv.Atoi(portStr)
+			if err!=nil{
+				util.Red.Println("Not a valid port number, please try again ", err)
+				continue
+			}
+			configuration.Port=portInt
+			break
+		}
 	}
 
 	util.Cyan.Printf("Enter password for Sender %s (password remains encrypted in your machine) : ", configuration.Sender)
