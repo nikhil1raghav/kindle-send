@@ -7,6 +7,7 @@ import (
 	"os"
 	user2 "os/user"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -62,9 +63,9 @@ func CreateConfig() *config {
 	util.CyanBold.Println("CONFIGURE KINDLE-SEND")
 
 	configuration := NewConfig()
-	util.Cyan.Printf("Email of your kindle and press enter (eg. purple_terminal@kindle.com) : ")
+	util.Cyan.Printf("Email of your device and press enter (eg. purple_terminal@kindle.com) : ")
 	configuration.Receiver = util.ScanlineTrim()
-	util.Cyan.Printf("Email that'll be used to send documents to kindle (eg. yourname@gmail.com) : ")
+	util.Cyan.Printf("Email that'll be used to send documents to device (eg. yourname@gmail.com) : ")
 	configuration.Sender = util.ScanlineTrim()
 
 	if isGmail(configuration.Sender) == false {
@@ -74,8 +75,17 @@ func CreateConfig() *config {
 
 		util.Cyan.Printf("Enter SMTP Server Address (eg. smtp.gmail.com) : ")
 		configuration.Server = util.ScanlineTrim()
-		util.Cyan.Printf("Enter SMTP port (usually 587 or 485) : ")
-		configuration.Server = util.ScanlineTrim()
+		for {
+			util.Cyan.Printf("Enter SMTP port (usually 587 or 465) : ")
+			portStr:=util.ScanlineTrim()
+			portInt, err:=strconv.Atoi(portStr)
+			if err!=nil{
+				util.Red.Println("Entered port number is either invalid or not an integer, please try again")
+				continue
+			}
+			configuration.Port=portInt
+			break
+		}
 	}
 
 	util.Cyan.Printf("Enter password for Sender %s (password remains encrypted in your machine) : ", configuration.Sender)
@@ -101,7 +111,7 @@ func handleCreation(filename string) error {
 		util.Red.Println("Error while writing config to ", filename, err)
 		return err
 	}
-	util.Red.Printf("Config created successfully and stored at %s, you can directly edit it later on ", filename)
+	util.Red.Printf("Config created successfully and stored at %s, you can directly edit it later on \n", filename)
 	return nil
 }
 func Load(filename string) (config, error) {
