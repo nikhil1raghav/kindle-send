@@ -80,7 +80,7 @@ func CreateConfig() *config {
 			portStr:=util.ScanlineTrim()
 			portInt, err:=strconv.Atoi(portStr)
 			if err!=nil{
-				util.Red.Println("Not a valid port number, please try again ", err)
+				util.Red.Println("Entered port number is either invalid or not an integer, please try again")
 				continue
 			}
 			configuration.Port=portInt
