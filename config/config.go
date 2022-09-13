@@ -41,7 +41,7 @@ func DefaultConfigPath() (string, error) {
 		configFolder = path.Join(configFolder, ConfigFolderName)
 		util.Cyan.Println("Config home not set, will look for config at ", configFolder)
 	}else{
-		configFolder = xdgConfigHome
+		configFolder = path.Join(xdgConfigHome, ConfigFolderName)
 	}
 	_=os.Mkdir(configFolder, os.ModePerm)
 
