@@ -48,17 +48,24 @@ func main() {
 	filePath := flag.String("file", "", "Mail a file to kindle, use kindle-send as a simple mailer")
 	mailTimeout :=flag.Int("mail-timeout",120, "Timeout for sending mail in Seconds" )
 	_ =flag.Bool("version", false, "Print version information")
+	_ =flag.Bool("dry-run", false, "Save epub locally and don't send to device")
 
 	flag.Parse()
 	passed := 0
 	flag.Visit(func(f *flag.Flag) {
 		passed++
 	})
-	if passed == 0 {
-		flag.PrintDefaults()
-	}
+
 	if flagPassed("version"){
 		util.PrintVersion()
+		if passed==1{
+			return
+		}
+	}
+
+
+	if passed == 0 {
+		flag.PrintDefaults()
 	}
 
 
@@ -87,6 +94,15 @@ func main() {
 		} else {
 			filesToSend = append(filesToSend, book)
 		}
+	}
+
+	if flagPassed("dry-run"){
+		util.CyanBold.Println("Dry-run mode : Not sending files to device")
+		util.Cyan.Println("Following files are saved")
+		for i,file:=range filesToSend{
+			util.Cyan.Printf("%d %s\n",i+1,file)
+		}
+		return
 	}
 	if len(filesToSend) != 0 {
 		timeout:=config.DefaultTimeout
