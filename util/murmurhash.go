@@ -1,11 +1,16 @@
 package util
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 func GetHash(name string) string{
 	hash:=murmurHash64B([]byte(name), 0)
 	hashStr:=strconv.Itoa(int(hash))
-	return hashStr
+
+	//TODO: this works but is functionally incorrect, assign mimetype based on content
+	return fmt.Sprintf("img%s.png",hashStr)
 }
 func murmurHash64B(key []byte, seed uint64) (hash uint64) {
 	const m uint32 = 0x5bd1e995

@@ -1,7 +1,6 @@
 package mail
 
 import (
-	"fmt"
 	"github.com/nikhil1raghav/kindle-send/util"
 	"os"
 	"time"
@@ -19,32 +18,36 @@ func Send(files []string, timeout int) {
 
 	msg.SetBody("text/plain", "")
 
-	tosend := 0
+	attachedFiles:=make([]string,0)
 	for _, file := range files {
 		_, err := os.Stat(file)
 		if err != nil {
 			util.Red.Printf("Couldn't find the file %s : %s \n", file, err)
 			continue
 		} else {
-			tosend++
 			msg.Attach(file)
+			attachedFiles=append(attachedFiles,file)
 		}
 	}
-	if tosend == 0 {
+	if len(attachedFiles) == 0 {
 		util.Cyan.Println("No files to send")
 		return
 	}
 
 	dialer := gomail.NewDialer(cfg.Server, cfg.Port, cfg.Sender, cfg.Password)
 	dialer.Timeout=time.Duration(timeout)*time.Second
-	fmt.Println("Dialer timeout ", dialer.Timeout)
-
 	util.CyanBold.Println("Sending mail")
+	util.Cyan.Println("Mail timeout : ", dialer.Timeout.String())
+	util.Cyan.Println("Following files will be sent :")
+	for i,file:=range attachedFiles{
+		util.Cyan.Printf("%d. %s\n",i+1,file)
+	}
+
 	if err := dialer.DialAndSend(msg); err != nil {
 		util.Red.Println("Error sending mail : ", err)
 		return
 	} else {
-		util.GreenBold.Printf("Mailed %d files to %s", tosend, cfg.Receiver)
+		util.GreenBold.Printf("Mailed %d files to %s", len(attachedFiles), cfg.Receiver)
 	}
 
 }
