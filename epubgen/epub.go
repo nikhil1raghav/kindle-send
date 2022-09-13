@@ -61,6 +61,7 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 		imageFileName:=util.GetHash(imgSrc)
 
 		imgRef, err := e.Epub.AddImage(imgSrc, imageFileName)
+		util.WriteToGray(imgRef)
 		if err != nil {
 			util.Red.Printf("Couldn't add image %s : %s\n", imgSrc, err)
 			return
