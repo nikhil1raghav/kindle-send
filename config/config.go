@@ -21,6 +21,7 @@ type config struct {
 }
 const DefaultTimeout = 120
 const XdgConfigHome = "XDG_CONFIG_HOME"
+const ConfigFolderName = "kindle-send"
 var instance *config
 
 func isGmail(mail string) bool {
@@ -37,6 +38,7 @@ func DefaultConfigPath() (string, error) {
 	var configFolder string
 	if len(xdgConfigHome)==0{
 		configFolder =path.Join(user.HomeDir, ".config")
+		configFolder = path.Join(configFolder, ConfigFolderName)
 		util.Cyan.Println("Config home not set, will look for config at ", configFolder)
 	}else{
 		configFolder = xdgConfigHome
@@ -111,7 +113,7 @@ func handleCreation(filename string) error {
 		util.Red.Println("Error while writing config to ", filename, err)
 		return err
 	}
-	util.Red.Printf("Config created successfully and stored at %s, you can directly edit it later on \n", filename)
+	util.Green.Printf("Config created successfully and stored at %s, you can directly edit it later on \n", filename)
 	return nil
 }
 func Load(filename string) (config, error) {
