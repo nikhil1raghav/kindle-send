@@ -1,4 +1,4 @@
-package util
+package imageutil
 
 import (
 	"image"
@@ -7,19 +7,17 @@ import (
 	"os"
 )
 func WriteToGray(filePath string){
-	img, err:=loadImage(filePath)
+	img, err:= loadImage(filePath)
 	if err!=nil{
 		log.Println(err)
 		return
 	}
+
 	grayImage := rgbaToGray(img)
 	os.Remove(filePath)
-	log.Println("Removed old image")
 	f,_:=os.Create(filePath)
 	defer f.Close()
 	png.Encode(f,grayImage)
-	log.Println("Wrote the image :)")
-
 }
 func loadImage(filePath string)(image.Image, error){
 	infile, err:=os.Open(filePath)
@@ -27,7 +25,7 @@ func loadImage(filePath string)(image.Image, error){
 		return nil, err
 	}
 	defer infile.Close()
-	img, _, err:=image.Decode(infile)
+	img, _ , err:=image.Decode(infile)
 	if err!=nil{
 		return nil, err
 	}

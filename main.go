@@ -49,6 +49,8 @@ func main() {
 	mailTimeout :=flag.Int("mail-timeout",120, "Timeout for sending mail in Seconds" )
 	_ =flag.Bool("version", false, "Print version information")
 	_ =flag.Bool("dry-run", false, "Save epub locally and don't send to device")
+	_=flag.Bool("no-image", false, "Render epub without images")
+	_=flag.Bool("color", false, "By default epub is rendered with grayscale image to reduce size,\npass --color to render with colored image")
 
 	flag.Parse()
 	passed := 0
@@ -83,6 +85,13 @@ func main() {
 		util.Red.Println(err)
 		return
 	}
+	cfg:=config.GetInstance()
+	if flagPassed("no-image"){
+		cfg.NoImage=true
+	}
+	if flagPassed("color"){
+		cfg.Color=true
+	}
 	filesToSend := make([]string, 0)
 	if len(*filePath) != 0 {
 		filesToSend = append(filesToSend, *filePath)
@@ -95,6 +104,7 @@ func main() {
 			filesToSend = append(filesToSend, book)
 		}
 	}
+
 
 	if flagPassed("dry-run"){
 		util.CyanBold.Println("Dry-run mode : Not sending files to device")

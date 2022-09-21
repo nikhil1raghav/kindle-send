@@ -18,6 +18,10 @@ type config struct {
 	Password  string `json:"password"`
 	Server    string `json:"server"`
 	Port      int    `json:"port"`
+	Color bool
+	Compress bool
+	NoImage bool
+	ImageDir string
 }
 const DefaultTimeout = 120
 const XdgConfigHome = "XDG_CONFIG_HOME"

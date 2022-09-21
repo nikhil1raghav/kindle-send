@@ -2,6 +2,8 @@ package epubgen
 
 import (
 	"errors"
+	"github.com/nikhil1raghav/kindle-send/imageutil"
+	"log"
 	"os"
 	"path"
 	"sync"
@@ -18,7 +20,18 @@ type epubmaker struct {
 	Epub      *epub.Epub
 	downloads map[string]string
 }
-
+func createTempImageDir() (string, error){
+	storePath:=config.GetInstance().StorePath
+	if len(storePath)==0{
+		curDir , err := os.Getwd()
+		if err!=nil{
+			storePath="./"
+		}else{
+			storePath=curDir
+		}
+	}
+	return os.MkdirTemp(storePath, "img")
+}
 func NewEpubmaker(title string) *epubmaker {
 	downloadMap := make(map[string]string)
 	return &epubmaker{
@@ -30,7 +43,10 @@ func NewEpubmaker(title string) *epubmaker {
 func fetchReadable(url string) (readability.Article, error) {
 	return readability.FromURL(url, 30*time.Second)
 }
-
+//remove images from the document
+func (e *epubmaker) removeImages(i int, img *goquery.Selection){
+	img.Remove()
+}
 //Point remote image link to downloaded image
 func (e *epubmaker) changeRefs(i int, img *goquery.Selection) {
 	img.RemoveAttr("loading")
@@ -58,10 +74,15 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 
 		//pass unique and safe image names here, then it will not crash on windows
 		//use murmur hash to generate file name
-		imageFileName:=util.GetHash(imgSrc)
+		log.Println("Queuing for download ",imgSrc)
+		imageFileName, err:=imageutil.Process(imgSrc)
+		log.Println("ImageFIlename", imageFileName)
+		if err!=nil{
+			util.Red.Printf("Error processing image %s : %s\n", imgSrc, err)
+			return
+		}
 
-		imgRef, err := e.Epub.AddImage(imgSrc, imageFileName)
-		util.WriteToGray(imgRef)
+		imgRef, err := e.Epub.AddImage(imageFileName,"")
 		if err != nil {
 			util.Red.Printf("Couldn't add image %s : %s\n", imgSrc, err)
 			return
@@ -78,6 +99,12 @@ func (e *epubmaker) embedImages(wg *sync.WaitGroup, article *readability.Article
 	defer wg.Done()
 	//TODO: Compress images before embedding to improve size
 	doc := goquery.NewDocumentFromNode(article.Node)
+	cfg:=config.GetInstance()
+	if cfg.NoImage{
+		doc.Find("img").Each(e.removeImages)
+		return
+	}
+
 
 	//download all images
 	doc.Find("img").Each(e.downloadImages)
@@ -121,6 +148,19 @@ func (e *epubmaker) addContent(articles *[]readability.Article) error {
 func Make(pageUrls []string, title string) (string, error) {
 	//TODO: Parallelize fetching pages
 
+	cfg:=config.GetInstance()
+	//create directory to store images
+	if !cfg.NoImage{
+
+		imgdir, err:=createTempImageDir()
+		if err!=nil{
+			util.Red.Println("Couldn't create directory to store images, saving document without images")
+			cfg.NoImage=true
+		}else{
+			cfg.ImageDir=imgdir
+			defer os.RemoveAll(imgdir)
+		}
+	}
 	//Get readable article from urls
 	readableArticles := make([]readability.Article, 0)
 	for _, pageUrl := range pageUrls {
@@ -175,6 +215,11 @@ func Make(pageUrls []string, title string) (string, error) {
 	err = book.Epub.Write(filename)
 	if err != nil {
 		return "", err
+	}
+	if !cfg.NoImage{
+		if len(cfg.ImageDir)!=0{
+			//os.RemoveAll(cfg.ImageDir)
+		}
 	}
 	return filename, nil
 }
