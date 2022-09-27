@@ -1,0 +1,30 @@
+project_name: 'kindle-send'
+
+builds:
+  - main: './main.go'
+    binary: 'kindle-send'
+    goos: ['linux', 'darwin', 'windows']
+    goarch: ['amd64', 'arm64']
+    env: CGO_ENABLED=0
+    flags:
+      - -mod=vendor
+
+changelog:
+  sort: 'asc'
+  filters:
+    exclude: ['^docs:', '^test:', 'Merge pull request', 'Merge branch']
+
+archives:
+  - format_overrides:
+    - goos: 'windows'
+      format: 'zip'
+
+nfpms:
+  - formats: ['deb', 'rpm']
+    dependencies: ['git']
+
+brews:
+  - github:
+      owner: 'nikhil1raghav'
+      name: 'homebrew-tap'
+    folder: 'Formula'

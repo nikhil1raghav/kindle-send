@@ -1,0 +1,4 @@
+*.epub
+epubcheck*
+.DS_Store
+*.swp
