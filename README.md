@@ -53,12 +53,21 @@ As this was not the case with the older [python version](https://github.com/nikh
 
 
 
+#### Brew
 
+Kindle-send can be installed via brew
 
+```sh
+brew install nikhil1raghav/tap/kindle-send
+```
+
+#### Download binary
 
 Download the binary for your operating system and architecture from [release page](https://github.com/nikhil1raghav/kindle-send/releases) and add it to your [PATH](https://en.wikipedia.org/wiki/PATH_(variable)).
 If there is no binary compatible for your system. Please create an issue.
 
+
+#### Go install
 
 If you have golang installed, you can also install kindle-send using
 
