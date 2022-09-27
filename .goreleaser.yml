@@ -5,7 +5,8 @@ builds:
     binary: 'kindle-send'
     goos: ['linux', 'darwin', 'windows']
     goarch: ['amd64', 'arm64']
-    env: CGO_ENABLED=0
+    env: 
+      - CGO_ENABLED=0
     flags:
       - -mod=vendor
     ldflags:
