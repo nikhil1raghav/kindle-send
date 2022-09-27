@@ -8,6 +8,8 @@ builds:
     env: CGO_ENABLED=0
     flags:
       - -mod=vendor
+    ldflags:
+      - -s -w -X github.com/nikhil1raghav/kindle-send/util.version={{.Version}} -X github.com/nikhil1raghav/kindle-send/util.buildDate={{.Date}}
 
 changelog:
   sort: 'asc'
@@ -18,10 +20,6 @@ archives:
   - format_overrides:
     - goos: 'windows'
       format: 'zip'
-
-nfpms:
-  - formats: ['deb', 'rpm']
-    dependencies: ['git']
 
 brews:
   - github:
