@@ -5,7 +5,7 @@ builds:
     binary: 'kindle-send'
     goos: ['linux', 'darwin', 'windows']
     goarch: ['amd64', 'arm64']
-    env:
+    env: 
       - CGO_ENABLED=0
     flags:
       - -mod=vendor
@@ -23,7 +23,8 @@ archives:
       format: 'zip'
 
 brews:
-  - github:
+  - 
+    tap:
       owner: 'nikhil1raghav'
       name: 'homebrew-tap'
     folder: 'Formula'
