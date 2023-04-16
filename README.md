@@ -93,7 +93,7 @@ kindle-send send Jane-eyre-Autobiography.epub
 
 
 <p align="center">
-  <img width="100%" src="assets/file-send.svg">
+  <img width="100%" src="assets/sendfile-new.svg">
 </p>
 
 
@@ -107,7 +107,7 @@ kindle-send send http://paulgraham.com/hwh.html
 ```
 
 <p align="center">
-  <img width="100%" src="assets/kindle-send-window.svg">
+  <img width="100%" src="assets/sendurl-new.svg">
 </p>
 
 
@@ -123,7 +123,7 @@ kindle-send send links.txt
 ```
 
 <p align="center">
-  <img width="100%" src="assets/linkfile.svg">
+  <img width="100%" src="assets/send-link-file-new.svg">
 </p>
 
 
@@ -157,6 +157,9 @@ Example
 kindle-send download https://blog.maxgio.me/posts/linux-scheduler-journey/
 ```
 
+<p align="center">
+  <img width="100%" src="assets/download-new.svg">
+</p>
 
 
 
