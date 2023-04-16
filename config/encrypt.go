@@ -45,7 +45,7 @@ func aesencrypt(key string, msg string) (ret string, err error) {
 func aesdecrypt(key, msg string) (ret string, err error) {
 	data, err := hex.DecodeString(msg)
 	if err != nil {
-		err = errors.New("Cannot decode the password")
+		err = errors.New("cannot decode the password")
 		return
 	}
 	c, err := aes.NewCipher(createHash("gibberish" + key + "gibb"))
