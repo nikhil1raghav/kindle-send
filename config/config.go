@@ -2,13 +2,14 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/nikhil1raghav/kindle-send/util"
 	"io/ioutil"
 	"os"
 	user2 "os/user"
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/nikhil1raghav/kindle-send/util"
 )
 
 type config struct {
@@ -19,9 +20,11 @@ type config struct {
 	Server    string `json:"server"`
 	Port      int    `json:"port"`
 }
+
 const DefaultTimeout = 120
 const XdgConfigHome = "XDG_CONFIG_HOME"
 const ConfigFolderName = "kindle-send"
+
 var instance *config
 
 func isGmail(mail string) bool {
@@ -34,16 +37,16 @@ func DefaultConfigPath() (string, error) {
 		util.Red.Println("Couldn't get current user ", err)
 		os.Exit(1)
 	}
-	xdgConfigHome:=os.Getenv(XdgConfigHome)
+	xdgConfigHome := os.Getenv(XdgConfigHome)
 	var configFolder string
-	if len(xdgConfigHome)==0{
-		configFolder =path.Join(user.HomeDir, ".config")
+	if len(xdgConfigHome) == 0 {
+		configFolder = path.Join(user.HomeDir, ".config")
 		configFolder = path.Join(configFolder, ConfigFolderName)
-		util.Cyan.Println("Config home not set, will look for config at ", configFolder)
-	}else{
+		//util.Cyan.Println("Config home not set, will look for config at ", configFolder)
+	} else {
 		configFolder = path.Join(xdgConfigHome, ConfigFolderName)
 	}
-	_=os.Mkdir(configFolder, os.ModePerm)
+	_ = os.Mkdir(configFolder, os.ModePerm)
 
 	return path.Join(configFolder, "KindleConfig.json"), nil
 }
@@ -70,7 +73,7 @@ func CreateConfig() *config {
 	util.Cyan.Printf("Email that'll be used to send documents to device (eg. yourname@gmail.com) : ")
 	configuration.Sender = util.ScanlineTrim()
 
-	if isGmail(configuration.Sender) == false {
+	if !isGmail(configuration.Sender) {
 		util.Cyan.Println("Sender email is different then Gmail, " +
 			"can you help with SMTP server address and SMTP port for your email provider\n" +
 			"Just search SMTP settings for <your email domain>.com on internet")
@@ -79,13 +82,13 @@ func CreateConfig() *config {
 		configuration.Server = util.ScanlineTrim()
 		for {
 			util.Cyan.Printf("Enter SMTP port (usually 587 or 465) : ")
-			portStr:=util.ScanlineTrim()
-			portInt, err:=strconv.Atoi(portStr)
-			if err!=nil{
+			portStr := util.ScanlineTrim()
+			portInt, err := strconv.Atoi(portStr)
+			if err != nil {
 				util.Red.Println("Entered port number is either invalid or not an integer, please try again")
 				continue
 			}
-			configuration.Port=portInt
+			configuration.Port = portInt
 			break
 		}
 	}
