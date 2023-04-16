@@ -28,6 +28,10 @@ func isUrlFile(u string) bool {
 	content := string(buf[:n])
 	lines := strings.Split(content, "\n")
 	for _, line := range lines {
+		line = strings.Trim(line, " ")
+		if len(line) == 0 {
+			continue
+		}
 		if !strings.HasPrefix(line, "http") {
 			return false
 		}

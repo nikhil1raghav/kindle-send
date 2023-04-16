@@ -43,6 +43,9 @@ func ExtractLinks(filename string) (links []string) {
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
 	for scanner.Scan() {
+		if len(scanner.Text()) == 0 {
+			continue
+		}
 		links = append(links, scanner.Text())
 	}
 	return
