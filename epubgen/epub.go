@@ -169,11 +169,11 @@ func Make(pageUrls []string, title string) (string, error) {
 		storeDir = config.GetInstance().StorePath
 	}
 
-	filename := util.SanitazeFileName(title+".epub", "_")
+	filename := util.SanitazeFileNameAndReplaceWhitespaces(title+".epub", "_")
 	filepath := path.Join(storeDir, filename)
 	err = book.Epub.Write(filepath)
 	if err != nil {
 		return "", err
 	}
-	return filename, nil
+	return filepath, nil
 }
