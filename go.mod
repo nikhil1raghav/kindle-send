@@ -7,6 +7,7 @@ require (
 	github.com/bmaupin/go-epub v1.0.1
 	github.com/fatih/color v1.13.0
 	github.com/go-shiori/go-readability v0.0.0-20220215145315-dd6828d2f09b
+	github.com/gosimple/slug v1.13.1
 	github.com/lithammer/dedent v1.1.0
 	github.com/spf13/cobra v1.0.0
 	gopkg.in/mail.v2 v2.3.1
@@ -18,6 +19,7 @@ require (
 	github.com/go-shiori/dom v0.0.0-20210627111528-4e4722cd0d65 // indirect
 	github.com/gofrs/uuid v3.1.0+incompatible // indirect
 	github.com/gogs/chardet v0.0.0-20191104214054-4b6791f73a28 // indirect
+	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/mattn/go-colorable v0.1.9 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect

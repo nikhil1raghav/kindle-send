@@ -10,6 +10,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/bmaupin/go-epub"
 	"github.com/go-shiori/go-readability"
+	"github.com/gosimple/slug"
 	"github.com/nikhil1raghav/kindle-send/config"
 	"github.com/nikhil1raghav/kindle-send/util"
 )
@@ -169,7 +170,13 @@ func Make(pageUrls []string, title string) (string, error) {
 		storeDir = config.GetInstance().StorePath
 	}
 
-	filename := util.SanitazeFileNameAndReplaceWhitespaces(title+".epub", "_")
+	titleSlug := slug.Make(title)
+	var filename string
+	if len(titleSlug) == 0 {
+		filename = "kindle-send-doc-" + util.GetHash(readableArticles[0].Content) + ".epub"
+	} else {
+		filename = titleSlug + ".epub"
+	}
 	filepath := path.Join(storeDir, filename)
 	err = book.Epub.Write(filepath)
 	if err != nil {
