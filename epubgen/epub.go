@@ -10,6 +10,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/bmaupin/go-epub"
 	"github.com/go-shiori/go-readability"
+	"github.com/gosimple/slug"
 	"github.com/nikhil1raghav/kindle-send/config"
 	"github.com/nikhil1raghav/kindle-send/util"
 )
@@ -31,7 +32,7 @@ func fetchReadable(url string) (readability.Article, error) {
 	return readability.FromURL(url, 30*time.Second)
 }
 
-//Point remote image link to downloaded image
+// Point remote image link to downloaded image
 func (e *epubmaker) changeRefs(i int, img *goquery.Selection) {
 	img.RemoveAttr("loading")
 	img.RemoveAttr("srcset")
@@ -44,7 +45,7 @@ func (e *epubmaker) changeRefs(i int, img *goquery.Selection) {
 	}
 }
 
-//Download images and add to epub zip
+// Download images and add to epub zip
 func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 	util.CyanBold.Println("Downloading Images")
 	imgSrc, exists := img.Attr("src")
@@ -58,7 +59,7 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 
 		//pass unique and safe image names here, then it will not crash on windows
 		//use murmur hash to generate file name
-		imageFileName:=util.GetHash(imgSrc)
+		imageFileName := util.GetHash(imgSrc)
 
 		imgRef, err := e.Epub.AddImage(imgSrc, imageFileName)
 		if err != nil {
@@ -71,7 +72,7 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 	}
 }
 
-//Fetches images in article and then embeds them into epub
+// Fetches images in article and then embeds them into epub
 func (e *epubmaker) embedImages(wg *sync.WaitGroup, article *readability.Article) {
 	util.Cyan.Println("Embedding images in ", article.Title)
 	defer wg.Done()
@@ -93,12 +94,12 @@ func (e *epubmaker) embedImages(wg *sync.WaitGroup, article *readability.Article
 	}
 }
 
-//TODO: Look for better formatting, this is bare bones
+// TODO: Look for better formatting, this is bare bones
 func prepare(article *readability.Article) string {
 	return "<h1>" + article.Title + "</h1>" + article.Content
 }
 
-//Add articles to epub
+// Add articles to epub
 func (e *epubmaker) addContent(articles *[]readability.Article) error {
 	added := 0
 	for _, article := range *articles {
@@ -116,7 +117,7 @@ func (e *epubmaker) addContent(articles *[]readability.Article) error {
 	return nil
 }
 
-//Generates a single epub from a slice of urls, returns file path
+// Generates a single epub from a slice of urls, returns file path
 func Make(pageUrls []string, title string) (string, error) {
 	//TODO: Parallelize fetching pages
 
@@ -169,11 +170,17 @@ func Make(pageUrls []string, title string) (string, error) {
 		storeDir = config.GetInstance().StorePath
 	}
 
-
-	filename := path.Join(storeDir, title+".epub")
-	err = book.Epub.Write(filename)
+	titleSlug := slug.Make(title)
+	var filename string
+	if len(titleSlug) == 0 {
+		filename = "kindle-send-doc-" + util.GetHash(readableArticles[0].Content) + ".epub"
+	} else {
+		filename = titleSlug + ".epub"
+	}
+	filepath := path.Join(storeDir, filename)
+	err = book.Epub.Write(filepath)
 	if err != nil {
 		return "", err
 	}
-	return filename, nil
+	return filepath, nil
 }
