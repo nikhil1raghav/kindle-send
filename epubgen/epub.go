@@ -2,8 +2,12 @@ package epubgen
 
 import (
 	"errors"
+	"image/png"
+	"net/http"
 	"os"
 	"path"
+	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -13,15 +17,22 @@ import (
 	"github.com/gosimple/slug"
 	"github.com/nikhil1raghav/kindle-send/config"
 	"github.com/nikhil1raghav/kindle-send/util"
+	"golang.org/x/image/webp"
 )
+
+type epubImage struct {
+	epubImgSrc  string
+	localImgSrc string
+}
 
 type epubmaker struct {
 	Epub      *epub.Epub
-	downloads map[string]string
+	tmpDir    string
+	downloads map[string]epubImage
 }
 
 func NewEpubmaker(title string) *epubmaker {
-	downloadMap := make(map[string]string)
+	downloadMap := make(map[string]epubImage)
 	return &epubmaker{
 		Epub:      epub.NewEpub(title),
 		downloads: downloadMap,
@@ -39,8 +50,8 @@ func (e *epubmaker) changeRefs(i int, img *goquery.Selection) {
 	imgSrc, exists := img.Attr("src")
 	if exists {
 		if _, ok := e.downloads[imgSrc]; ok {
-			util.Green.Printf("Setting img src from %s to %s \n", imgSrc, e.downloads[imgSrc])
-			img.SetAttr("src", e.downloads[imgSrc])
+			util.Green.Printf("Setting img src from %s to %s \n", imgSrc, e.downloads[imgSrc].epubImgSrc)
+			img.SetAttr("src", e.downloads[imgSrc].epubImgSrc)
 		}
 	}
 }
@@ -61,15 +72,39 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 		//use murmur hash to generate file name
 		imageFileName := util.GetHash(imgSrc)
 
-		imgRef, err := e.Epub.AddImage(imgSrc, imageFileName)
+		output := e.downloadAndProcessImage(imgSrc, imageFileName)
+
+		var imgRef string
+		var err error
+
+		if len(output) > 0 {
+			imgRef, err = e.Epub.AddImage(output, imageFileName)
+		} else {
+			imgRef, err = e.Epub.AddImage(imgSrc, imageFileName)
+		}
 		if err != nil {
 			util.Red.Printf("Couldn't add image %s : %s\n", imgSrc, err)
 			return
 		} else {
 			util.Green.Printf("Downloaded image %s\n", imgSrc)
-			e.downloads[imgSrc] = imgRef
+			entry := epubImage{epubImgSrc: imgRef, localImgSrc: output}
+			e.downloads[imgSrc] = entry
 		}
 	}
+}
+
+func (e *epubmaker) downloadAndProcessImage(src string, fileName string) string {
+	filePath := filepath.Join(e.tmpDir, fileName)
+	if strings.HasSuffix(src, ".webp") {
+		util.GreenBold.Printf("Test %s\n", filePath)
+		f, _ := http.Get(src)
+		img, _ := webp.Decode(f.Body)
+		pngFile, _ := os.Create(filePath)
+		png.Encode(pngFile, img)
+		return filePath
+	}
+
+	return ""
 }
 
 // Fetches images in article and then embeds them into epub
@@ -147,6 +182,11 @@ func Make(pageUrls []string, title string) (string, error) {
 
 	//get images and embed them
 	var wg sync.WaitGroup
+
+	tmpDir, _ := os.MkdirTemp("", "kindle-send-")
+	book.tmpDir = tmpDir
+
+	defer os.RemoveAll(tmpDir)
 
 	for i := 0; i < len(readableArticles); i++ {
 		wg.Add(1)
