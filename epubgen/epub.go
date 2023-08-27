@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 
@@ -68,11 +67,7 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 			return
 		}
 
-		//pass unique and safe image names here, then it will not crash on windows
-		//use murmur hash to generate file name
-		imageFileName := util.GetHash(imgSrc)
-
-		output := e.downloadAndProcessImage(imgSrc, imageFileName)
+		imageFileName, output, _ := e.processImage(imgSrc)
 
 		var imgRef string
 		var err error
@@ -93,18 +88,28 @@ func (e *epubmaker) downloadImages(i int, img *goquery.Selection) {
 	}
 }
 
-func (e *epubmaker) downloadAndProcessImage(src string, fileName string) string {
-	filePath := filepath.Join(e.tmpDir, fileName)
-	if strings.HasSuffix(src, ".webp") {
-		util.GreenBold.Printf("Test %s\n", filePath)
+func (e *epubmaker) processImage(src string) (string, string, error) {
+	getName := func(src string, ext string) string {
+		return "img" + util.GetHash(src) + "." + ext
+	}
+	r, err := http.Head(src)
+	if err != nil {
+		return "", "", err
+	}
+	switch contentType := r.Header.Get("Content-type"); contentType {
+	case "image/webp":
+		fileName := getName(src, "webp")
+		filePath := filepath.Join(e.tmpDir, fileName)
 		f, _ := http.Get(src)
 		img, _ := webp.Decode(f.Body)
 		pngFile, _ := os.Create(filePath)
 		png.Encode(pngFile, img)
-		return filePath
+		return fileName, filePath, nil
+	case "image/jpeg":
+		return getName(src, "jpg"), "", nil
+	default:
+		return getName(src, "png"), "", nil
 	}
-
-	return ""
 }
 
 // Fetches images in article and then embeds them into epub
@@ -183,6 +188,7 @@ func Make(pageUrls []string, title string) (string, error) {
 	//get images and embed them
 	var wg sync.WaitGroup
 
+	// TODO: Error handling
 	tmpDir, _ := os.MkdirTemp("", "kindle-send-")
 	book.tmpDir = tmpDir
 
