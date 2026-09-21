@@ -189,7 +189,9 @@ Feel free to create an issue and then working on some feature, so that we don't 
 - [ ] Weekly RSS feed dump, when combined with `cron`
 - [ ] Better CSS & formatting for epub
 - [ ] Compressing images before embedding to reduce final file size
-- [ ] Simple UI form driven by CLI. Something like `kindle-send dashboard`.
+- [ ] Simple UI form driven by CLI. Something like `kindle-send dashboard`. (Until
+  then, KindBeamer is a GUI for the sending side:
+  https://github.com/jooray/kindbeamer)
 - [x] Auto detect file type
 - [x] Option to download but not send the files
 - [x] Remove dependency on percollate and calibre
